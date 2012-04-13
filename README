@@ -1,0 +1,45 @@
+NAME
+    libmicrotocsv.pl - Run on libMicro output to convert to csv (printed to
+    STDOUT).
+
+SYNOPSIS
+    libmicrotocsv.pl file...
+
+          -h --help                  Print this help documentation
+          --data [name1[,name2...]]  Read and order data as specified
+
+DESCRIPTION
+    This script parses libMicro output. It would be a lot simpler if it just
+    needed to do some regex ninja action, but instead libMicro seems to have
+    very different output depending on the options you give it.
+
+    *INSTEAD* this script does a lookahead to see if the file is as it
+    expects, then adjusts its parsing accordingly. This isn't garunteed to
+    handle all sitations, please issues you see to me!
+
+  DATA SPECS
+    This program also includes the option of specifying the data to read and
+    in what order it should be printed (Name of the benchmark will always be
+    the first entry in a row).
+
+        Key           Meaning
+        ---------------------------------
+        mean          The estimated mean
+        stddev        Standard deviation
+        confidence    Confidence interval
+        numsamples    Number of samples in the mean
+        iterations    Number of inner loop iterations
+
+AUTHOR
+    Jean-Christophe Petkovich, <me@jcpetkovich.com>
+
+COPYRIGHT AND LICENSE
+    Copyright (C) 2012 by Jean-Christophe Petkovich
+
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself, either Perl version 5.8.2 or, at
+    your option, any later version of Perl 5 you may have available.
+
+BUGS
+    None reported... yet.
+
