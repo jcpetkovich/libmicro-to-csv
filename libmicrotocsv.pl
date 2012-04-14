@@ -106,6 +106,9 @@ sub dump_entry {
 
 adapt_format();
 
+# Dump header
+print join(',', @data_list), "\n";
+
 my %entry;
 open( my $ifh, "<", $ARGV[0] );
 LINE: while (<$ifh>) {
