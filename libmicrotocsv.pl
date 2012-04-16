@@ -7,13 +7,13 @@
 use warnings;
 use strict;
 use autodie;
-use Scalar::Util qw( looks_like_number );
 use Getopt::Long qw( :config auto_help );
 
 # Commandline options
 my $data_list = "name,numsamples,mean,stddev,confidence,iterations";
 GetOptions( 'data=s' => \$data_list );
 my @data_list = split( /,/, $data_list );
+my @data_with_outliers = qw( mean stddev confidence );
 
 # Patterns
 my %patterns = (
@@ -58,13 +58,13 @@ sub test_data_format {
         next if /^\s*$/;
         if ( $_ =~ /$data_regex$patterns{without_outliers}/ ) {
 
-            # Then there was an outlier free entry for "data"
+            # Then there was an outlier-free entry for "data"
             $without_outliers = "none of em!";
             last;
         }
         if ( $_ =~ /$data_regex$patterns{with_outliers}/ ) {
 
-            # Then there is no outlier free entry for "data"
+            # Then there is no outlier-free entry for "data"
             last;
         }
     }
@@ -78,7 +78,7 @@ sub adapt_format {
       ? $patterns{program_marked}
       : $patterns{program_unmarked};
 
-    for my $datum qw( mean stddev confidence ) {
+    for my $datum (@data_with_outliers) {
         $patterns{$datum} =
           test_data_format( $patterns{$datum}, $ARGV[0] )
           ? qr/$patterns{$datum}$patterns{without_outliers}/
@@ -96,9 +96,10 @@ sub dump_entry {
     # excess whitespace
     my @row;
     for my $val ( @en{@data_list} ) {
-        if ( looks_like_number($val) ) {
-            $val = 0 + $val;
-        }
+
+        # trim whitespace
+        $val =~ s/^\s+//;
+        $val =~ s/\s+$//;
         push @row, $val;
     }
     print join( ",", @row ), "\n";
@@ -107,7 +108,7 @@ sub dump_entry {
 adapt_format();
 
 # Dump header
-print join(',', @data_list), "\n";
+print join( ',', @data_list ), "\n";
 
 my %entry;
 open( my $ifh, "<", $ARGV[0] );
