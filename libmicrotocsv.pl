@@ -151,7 +151,7 @@ to have very different output depending on the options you give it.
 
 I<INSTEAD> this script does a lookahead to see if the file is as it
 expects, then adjusts its parsing accordingly. This isn't garunteed to
-handle all sitations, please issues you see to me!
+handle all sitations, please report issues you see to me!
 
 
 =head2 DATA SPECS
